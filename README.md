@@ -1,4 +1,4 @@
-# partysystem
+# movie-client
 
 > Nuxt.js project
 
