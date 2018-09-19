@@ -1,0 +1,62 @@
+/*css reset不用全部标签,对可能用到的使用就行*/
+html,body,dd,div,dl,dt,em,h1,h2,h3,h4,h5,h6,input,label,ul,li,ol,p,select,span,textarea{
+    margin:0;
+    padding:0;
+    /*-webkit-box-sizing:border-box;
+    -moz-box-sizing:border-box;
+    -ms-box-sizing:border-box;
+    -o-box-sizing:border-box;
+    box-sizing:border-box;*/
+    outline:0;
+  font-family: "微软雅黑",Arial;
+}
+img{
+    border:0;
+}
+a{
+    text-decoration:none;
+}
+li{
+    list-style: none;
+}
+html {
+     font-family: "微软雅黑",Arial;
+     user-select: none;
+}
+a,button,input,li,div{
+    -webkit-tap-highlight-color:rgba(0,0,0,0);
+}
+
+/* 定义动画 */
+.test-enter-active,.test-leave-active {
+  transition: all 1s ease;
+}
+
+
+/*
+* 定义过渡
+*/
+
+/* .fade-enter,.fade-leave-active {
+    opacity: 0
+} */
+
+/*
+* 定义宽高动画
+*/
+.test-enter-active{
+  opacity:1;
+  width:300px;
+  height:300px;
+}
+.test-leave-active{
+  opacity:0;
+  width:100px;
+  height:100px;
+}
+/* 重要：定义初始状态 */
+.ftest-enter{
+  opacity:0;
+  width:100px;
+  height:100px;
+}
