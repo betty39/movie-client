@@ -3,9 +3,11 @@
     <el-row type="flex" justify="space-between">
       <el-col :span="2">
         <div class="logo">
-          <p class="logo-text">电影推荐</p>
           <router-link class="logo-text"
-                       to="/movie/lists"
+                       to="/"
+          >电影推荐</router-link>
+          <router-link class="logo-text"
+                       to="/movie/list"
                        key="选片"
           >选片</router-link>
         </div>
@@ -36,10 +38,11 @@
         <!-- 登录后显示的昵称的部分 -->
         <div v-else class="user-handle">
           <router-link class="unlogin-handle"
-                       to="/user/profile"
+                       to="/user/percenter"
                        :key="loginUser.username"
           >{{loginUser.username}}</router-link>
-          <el-button @click="logout">退出</el-button>
+          <p class="unlogin-handle" @click="logout">退出</p>
+          <!--el-button @click="logout">退出</el-button-->
         </div>
       </el-col>
     </el-row>
@@ -58,12 +61,19 @@
       }
     },
     mounted() {
-      this.loginUser = this.$store.state.auth.user;
-      this.token     = this.$store.state.auth.token;
+      this.loginUser = this.$store.state.user;
+      this.token     = this.$store.state.token;
     },
     methods: {
       logout: function() {
         // 退出登录
+        this.$store.dispatch('logout')
+        alert("退出成功")
+        if (this.$route.path == "/") {
+          window.location.reload();
+        } else {
+          this.$router.push({path: `/`})
+        }
       },
     },
     components: {
@@ -104,9 +114,14 @@
     color: #fefefe;
     font-size: 20px;
     text-decoration: none;
+    cursor:pointer;
   }
   .user-handle{
     float: right;
+    position: absolute;
+    right: 60px;
+    height: 30px;
+    margin-top: -22px;
   }
   .language-wrapper{
     width: 100px;

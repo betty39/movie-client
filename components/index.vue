@@ -41,7 +41,7 @@
     },
     methods: {
       intoMovieDetail (movieid) {
-        this.$router.push({path: `/movie/$movieid`})
+        this.$router.push({path: `/movie/detail`})
       }
     },
     components: {

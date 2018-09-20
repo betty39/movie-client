@@ -6,14 +6,12 @@ import _ from 'lodash'
 const cookieTokenName = 'token'
 const cookieTokenExpiredName = 'token_expired'
 const cookieUserName = 'user'
-const cookieType = 'type'
 const isBrowser = process.browser
 
 export const state = () => ({
   user: {},
   token: '',
   tokenExpired: 0,
-  type: 0 // 初始为88，1为管理员
 })
 
 export const mutations = {
@@ -29,11 +27,6 @@ export const mutations = {
     if (expired && isBrowser) {
       Cookies.set(cookieTokenExpiredName, expired)
     }
-  },
-  SET_TYPE (state, type) {
-    type = type || 0
-    state.type = type
-    Cookies.set(cookieType, type)
   },
   SET_USER (state, user) {
     user = user || {}

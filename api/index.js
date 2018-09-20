@@ -30,13 +30,19 @@ for (var api in APICONFIG) {
           method: method,
           data: data,
           headers: {
-            token: token
+            authorization: token
           }
         }
+        // 解决axios 访问spring 接口，后台接收不到参数问题，qs或者URLSearchParams解决
+        let params = new URLSearchParams()
+        for (var key in config.data) {
+          params.append(key, data[key])
+        }
+        config.data = params;
 
         console.log(config)
 
-        axios(config).then((res) => {
+        axios(config, {emulateJSON: true}).then((res) => {
           try {
             let apiData = res.data
             console.log(apiData)
