@@ -41,7 +41,8 @@
     },
     methods: {
       intoMovieDetail (movieid) {
-        this.$router.push({path: `/movie/detail`})
+        let path = "/movie/" + movieid;
+        this.$router.push({path: path})
       }
     },
     components: {
@@ -81,21 +82,22 @@
   }
   .bd{
     position:absolute;
-    width:40%;
-    height:22%;
+    width:50%;
+    height:25%;
     z-indent:2;
     left:0;
     top:0;
-    font-size: 20px;
+    font-size: 18px;
     font-weight: 500;
     color: #ffffff;
     background-color:rgba(0,0,0,0.5);
-    left: 30%;
+    left: 25%;
     top: 55%;
+    cursor:pointer;
   }
   .title{
     font-face: "微软雅黑";
-    font-size: 22px;
+    font-size: 20px;
     margin-left: 10px;
     margin-top: 5px;
   }
