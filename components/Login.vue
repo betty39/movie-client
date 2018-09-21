@@ -15,7 +15,7 @@
           <el-input v-model="againPw" placeholder="重复密码" type="password"></el-input>
         </el-form-item>
         <el-form-item  v-if="showEmail" prop="email">
-          <el-input v-model="email" placeholder="邮箱" type="password"></el-input>
+          <el-input v-model="email" placeholder="邮箱" type="email"></el-input>
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="submitForm" class="submitBtn" round >{{ showText }}</el-button>
@@ -53,11 +53,10 @@
             // { min: 3, max: 10, message: '长度在 3 到 16 个字符', trigger: 'blur' }
           ],
           pwd: [
-            { required: true, message: '请输入密码', trigger: 'blur' },
-            { min: 3, max: 20, message: '长度在 3 到 20 个字符', trigger: 'blur' },
+            // { required: true, message: '请输入密码', trigger: 'blur' },
+            // { min: 3, max: 20, message: '长度在 3 到 20 个字符', trigger: 'blur' },
           ]
         }
-
       }
     },
     head () {

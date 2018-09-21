@@ -1,7 +1,5 @@
 <template>
   <div style="">
-
-
       <el-row>
         <el-col :span="20" :offset="2">
           <div >
@@ -13,12 +11,12 @@
                         <img src="../assets/image/user_avatar.jpg" class="userimg">
                       </el-col>
                       <el-col :span="12" :offset="2" style="margin-top: 60px">
-                        <p style="line-height: 30px;font-size: 20px;font-weight: bold">{{username}}</p>
+                        <p style="line-height: 30px;font-size: 20px;font-weight: bold">{{loginUser.username}}</p>
                       </el-col>
                     </el-row>
                   </el-col>
                   <el-col :span="11" style=";margin-top: 315px">
-                    <el-button type="primary" style="float: right" plain @click="dialogVisible = true">编辑个人资料</el-button>
+                    <el-button type="primary" style="float: right" plain @click="dialogVisible = true">修改密码</el-button>
                   </el-col>
                 </el-row>
               </div>
@@ -33,17 +31,22 @@
                   <p style="line-height: 30px;font-size: 20px;font-weight: bold;border-bottom: 1px solid #e8e4ea ;">我喜欢的电影</p>
                 </div>
                 <div class="movlist">
-                  <div class="movitem">
+                  <div class="movitem" v-for="(item, key) in likeLists" :key="key" @click="intoMovieDetail(item.href)">
                     <el-row>
                       <el-col :span="4">
-                        <img src="../assets/image/login_bkg.png" class="image">
+                        <img :src="item.movie.picture" class="image">
                       </el-col>
-
                       <el-col :span="19" :offset="1">
-                        <p>{{movtitle}}</p>
-                        <p>上映年份</p>
-                        <p style="margin-top: 10px">导演</p>
-                        <p style="margin-top: 10px">3.9<span>(6637人评价)</span></p>
+                        <p>{{ item.movie.moviename }}</p>
+                        <p class="content">{{ "上映年份: " + item.movie.showyear }}</p>
+                        <p class="content">{{ "导演: " + item.movie.director }}</p>
+                        <p class="content">{{ "热度" + item.movie.numrating }}</p>
+                        <p class="content">总评分:</p>
+                        <el-rate
+                          v-model="item.movie.averating"
+                          disabled
+                          show-score>
+                        </el-rate>
                       </el-col>
                     </el-row>
                   </div>
@@ -55,17 +58,25 @@
                 </div>
 
                 <div class="movlist">
-                  <div class="movitem">
+                  <div class="movitem" v-for="(item, key) in reviewLists" :key="key" @click="intoMovieDetail(item.href)">
                     <el-row>
                       <el-col :span="4">
-                        <img src="../assets/image/login_bkg.png" class="image">
+                        <img :src="item.movie.picture" class="image">
                       </el-col>
 
                       <el-col :span="19" :offset="1">
-                        <p>{{movtitle}}</p>
-                        <p>上映年份</p>
-                        <p style="margin-top: 10px">导演</p>
-                        <p style="margin-top: 10px">3.9<span>(6637人评价)</span></p>
+                        <p>{{ item.movie.moviename }}</p>
+                        <p class="content">{{ "上映年份: " + item.movie.showyear }}</p>
+                        <p class="content">{{ "导演: " + item.movie.director }}</p>
+                        <p class="content">{{ "热度: " + item.movie.numrating }}</p>
+                        <p class="content">{{ "评价内容: " + item.content }}</p>
+                        <p class="content">个人评分:</p>
+                        <el-rate
+                          v-model="item.star"
+                          disabled
+                          show-score>
+                        </el-rate>
+                        <p class="content">{{ "点评时间: " + item.reviewtime }}</p>
                       </el-col>
                     </el-row>
                   </div>
@@ -96,38 +107,60 @@
       </el-row>
 
     <el-dialog
-      title="修改用户信息"
+      title="修改密码"
       :visible.sync="dialogVisible"
       width="30%"
       :before-close="handleClose">
       <el-form   label-width="80px">
-      <el-form-item label="电子邮箱">
-        <el-input v-model="usermail"></el-input>
+      <el-form-item label="更改密码">
+        <el-input type="password" v-model="userpwd"></el-input>
       </el-form-item>
-      <el-form-item label="用户密码">
-        <el-input v-model="userpwd"></el-input>
+      <el-form-item label="重复更改密码">
+        <el-input type="password" v-model="againpwd"></el-input>
       </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
     <el-button @click="dialogVisible = false">取 消</el-button>
-    <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
+    <el-button type="primary" @click="resetPw">确 定</el-button>
   </span>
     </el-dialog>
   </div>
 </template>
 <script type="text/javascript">
+  import API from '../api'
   export default {
     name: 'movdetail',
     data () {
       return {
-        movtitle: 'tatanic',
         value:3.7,
         activeName:'first',
-        username:'shiwen',
+        loginUser: {},
         dialogVisible: false,
-        usermail:'',
-        userpwd:''
+        userpwd:'',
+        againpwd: '',
+        likeLists: [],
+        reviewLists: [],
       }
+    },
+    mounted() {
+      this.loginUser = this.$store.state.user;
+      // 请求喜欢与评价接口
+      API.profileRviewAndReactsApi({
+      }).then(res => {
+        this.likeLists = res.rectab
+        this.reviewLists = res.review
+        // 处理显示数据
+        this.likeLists.forEach(function (ele, index) {
+          ele['movie'].showyear = ele['movie'].showyear.substr(0, 4);
+          ele['href'] = "/movie/" + ele['movieid']
+        })
+        this.reviewLists.forEach(function (ele, index) {
+          ele['content'] = ele['content'] == null ? '' : ele['content']
+          ele['reviewtime'] = ele['reviewtime'].substr(0, 10)
+          ele['movie'].showyear = ele['movie'].showyear.substr(0, 4);
+          ele['href'] = "/movie/" + ele['movieid']
+        })
+      })
     },
     head () {
       return {
@@ -147,6 +180,24 @@
             done();
           })
           .catch(_ => {});
+      },
+      intoMovieDetail (href) {
+        this.$router.push({path: href})
+      },
+      async resetPw() {
+          this.dialogVisible = false;
+          if (this.userpwd == "" || this.userpwd !== this.againpwd) {
+              alert("提示：密码不为空且两次输入的密码应一致")
+          } else {
+            await API.resetpwApi({
+              password: this.userpwd,
+            }).then(res => {
+              if (res.code === undefined) {
+                alert("修改密码成功")
+                this.dialogVisible = false
+              }
+            })
+          }
       }
     }
   }
@@ -173,6 +224,7 @@
     padding-top: 20px;
     padding-bottom: 20px;
     border-bottom: 1px solid #f2eef4;
+    cursor:pointer;
   }
 
   .image {
@@ -186,5 +238,8 @@
 
   .userimg {
     width: 100%;
+  }
+  .content {
+    margin-top: 5px;
   }
 </style>
