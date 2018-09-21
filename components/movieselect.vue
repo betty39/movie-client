@@ -12,7 +12,7 @@
     <div class="movcard-list">
       <el-row>
         <el-col :span="6" v-for="item in movlist" :key="item.movieid" :offset="2" >
-          <div @click="intoMovieDetail(item)">
+          <div @click="intoMovieDetail(item.movieid)">
           <el-card :body-style="{ padding: '0px' }" style="margin-top: 10px" >
             <img v-bind:src="item.movie.picture" class="image">
             <div style="padding: 10px;">
@@ -33,10 +33,30 @@
       </div>
     </div>
     </el-col>
+    <el-col :span="7" :offset="2" style="margin-top: 90px;margin-bottom: 30px; width: 25%;" v-if="movieRecommentList.length > 0">
+      <el-card class="box-card">
+
+        <div>
+          <p style="line-height: 30px;font-size: 20px;font-weight: bold;border-bottom: 1px solid #e8e4ea ;color: #8c939d">推荐电影</p>
+        </div>
+
+        <div style="cursor: pointer" v-for="(item,key) in movieRecommentList" :key="key" @click="intoMovieDetail(item.movieId)">
+          <el-row style="border-bottom: 1px solid #f6f2f8 ;">
+            <el-col :span="18">
+              <p style="line-height: 40px">{{ item.movie.moviename }}</p>
+            </el-col>
+            <el-col :span="6">
+              <p style="text-align: right;line-height: 40px">{{ item.rating + "分" }}</p>
+            </el-col>
+          </el-row>
+        </div>
+      </el-card>
+    </el-col>
   </div>
 </template>
 <script type="text/javascript">
   import API from '../api'
+  import Cookies from 'js-cookie'
   export default {
     name: 'Login',
     data () {
@@ -48,9 +68,11 @@
           categoryid:'',
           category:'',
         }],
+        token: Cookies.get("token"),
         isshowbtn: true,
         isIndeterminate: true,
         currentDate: new Date(),
+        movieRecommentList: [],
         movlist:[{
           "movcatid": 134,
           "movieid": 110,
@@ -86,12 +108,20 @@
     mounted:function () {
       this.resqtcatelist()
       this.resqtmovlist()
+      // 请求推荐电影列表的接口
+      if (this.token){
+        API.movieRecommendApi({
+        }).then(res => {
+          this.movieRecommentList = res.movies
+          this.movieRecommentList.forEach(function (ele, index) {
+            ele['rating'] = ele['rating'].toFixed(1)
+          })
+        })
+      }
     },
     methods: {
       handleCheckedCitiesChange(value) {
-        let checkedCount = value.length;
-        this.checkAll = checkedCount === this.cities.length;
-        this.isIndeterminate = checkedCount > 0 && checkedCount < this.cities.length;
+        this.checkedCities = value
         this.movlist = []
         this.resqtmovlist()
       },
@@ -119,8 +149,8 @@
 
         })
       },
-      intoMovieDetail (item) {
-        let path = "/movie/" + item.movieid;
+      intoMovieDetail (movieid) {
+        let path = "/movie/" + movieid;
         this.$router.push({path: path})
       },
       handleCurrentChange () {

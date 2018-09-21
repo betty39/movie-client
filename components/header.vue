@@ -42,7 +42,6 @@
                        :key="loginUser.username"
           >{{loginUser.username}}</router-link>
           <p class="unlogin-handle" @click="logout">退出</p>
-          <!--el-button @click="logout">退出</el-button-->
         </div>
       </el-col>
     </el-row>
@@ -51,6 +50,7 @@
 
 <script>
   import NavSearch from '~/components/search.vue'
+  import Cookies from 'js-cookie'
 
   export default {
     data() {
@@ -61,8 +61,9 @@
       }
     },
     mounted() {
-      this.loginUser = this.$store.state.user;
-      this.token     = this.$store.state.token;
+      this.loginUser = Cookies.get("user");
+      this.loginUser = this.loginUser ? JSON.parse(this.loginUser) : {}
+      this.token     = Cookies.get("token");
     },
     methods: {
       logout: function() {

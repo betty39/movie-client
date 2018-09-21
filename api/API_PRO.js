@@ -6,11 +6,22 @@ export default {
   // 账户模块
   loginApi: {url: '/user/login'},
   registerApi: {url: '/user/register'},
-  movsearchApi: {url: '/movie/serchbyname'},
-  catelistApi: {url: '/movie/category',method:'get'},
-  movlistApi: {url: '/movie/movielist'},
   resetpwApi: {url: '/user/resetPw'},
 
   // 个人中心
   profileRviewAndReactsApi: {url: '/profile/lists'},
+  submitReviewApi: {url: '/profile/review'},
+  ifLikeMovieApi: {url: '/profile/ifLikeMovie'},
+  submitLikeApi: {url: '/profile/rectab'},
+
+  // 电影模块
+  movieDescApi: {url: '/movie/description'},
+  similarMoviesApi: {url: '/movie/getsimilar'},
+  movsearchApi: {url: '/movie/serchbyname'},
+  catelistApi: {url: '/movie/category',method:'get'},
+  movlistApi: {url: '/movie/movielist'},
+
+  // 推荐
+  movieRecommendApi: {url: '/profile/getRecommend'},
+
 }

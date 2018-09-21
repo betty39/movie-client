@@ -31,7 +31,7 @@
                   <p style="line-height: 30px;font-size: 20px;font-weight: bold;border-bottom: 1px solid #e8e4ea ;">我喜欢的电影</p>
                 </div>
                 <div class="movlist">
-                  <div class="movitem" v-for="(item, key) in likeLists" :key="key" @click="intoMovieDetail(item.href)">
+                  <div class="movitem" v-for="(item, key) in likeLists" :key="key" @click="intoMovieDetail(item.movieid)">
                     <el-row>
                       <el-col :span="4">
                         <img :src="item.movie.picture" class="image">
@@ -58,7 +58,7 @@
                 </div>
 
                 <div class="movlist">
-                  <div class="movitem" v-for="(item, key) in reviewLists" :key="key" @click="intoMovieDetail(item.href)">
+                  <div class="movitem" v-for="(item, key) in reviewLists" :key="key" @click="intoMovieDetail(item.movieid)">
                     <el-row>
                       <el-col :span="4">
                         <img :src="item.movie.picture" class="image">
@@ -91,13 +91,13 @@
                 <p style="line-height: 30px;font-size: 20px;font-weight: bold;border-bottom: 1px solid #e8e4ea ;color: #8c939d">推荐电影</p>
               </div>
 
-              <div v-for="o in 4" :key="o">
+              <div style="cursor: pointer" v-for="(item,key) in movieRecommentList" :key="key" @click="intoMovieDetail(item.movieId)">
                 <el-row style="border-bottom: 1px solid #f6f2f8 ;">
                   <el-col :span="18">
-                    <p style="line-height: 40px">{{'列表内容 ' + o }}</p>
+                    <p style="line-height: 40px">{{ item.movie.moviename }}</p>
                   </el-col>
                   <el-col :span="6">
-                    <p style="text-align: right;line-height: 40px">4.4分</p>
+                    <p style="text-align: right;line-height: 40px">{{ item.rating + "分" }}</p>
                   </el-col>
                 </el-row>
               </div>
@@ -140,6 +140,7 @@
         againpwd: '',
         likeLists: [],
         reviewLists: [],
+        movieRecommentList: [],
       }
     },
     mounted() {
@@ -150,15 +151,16 @@
         this.likeLists = res.rectab
         this.reviewLists = res.review
         // 处理显示数据
-        this.likeLists.forEach(function (ele, index) {
-          ele['movie'].showyear = ele['movie'].showyear.substr(0, 4);
-          ele['href'] = "/movie/" + ele['movieid']
-        })
         this.reviewLists.forEach(function (ele, index) {
           ele['content'] = ele['content'] == null ? '' : ele['content']
-          ele['reviewtime'] = ele['reviewtime'].substr(0, 10)
-          ele['movie'].showyear = ele['movie'].showyear.substr(0, 4);
-          ele['href'] = "/movie/" + ele['movieid']
+        })
+      })
+      // 请求推荐电影列表的接口
+      API.movieRecommendApi({
+      }).then(res => {
+        this.movieRecommentList = res.movies
+        this.movieRecommentList.forEach(function (ele, index) {
+          ele['rating'] = ele['rating'].toFixed(1)
         })
       })
     },
@@ -181,11 +183,11 @@
           })
           .catch(_ => {});
       },
-      intoMovieDetail (href) {
-        this.$router.push({path: href})
+      intoMovieDetail (movieid) {
+        let path = "/movie/" + movieid;
+        this.$router.push({path: path})
       },
       async resetPw() {
-          this.dialogVisible = false;
           if (this.userpwd == "" || this.userpwd !== this.againpwd) {
               alert("提示：密码不为空且两次输入的密码应一致")
           } else {

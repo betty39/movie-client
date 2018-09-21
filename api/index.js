@@ -1,6 +1,7 @@
 import axios from 'axios'
 import PRO from './API_PRO.js'
 import Cookies from 'js-cookie'
+import Qs from 'qs'
 
 // let DEV_ENV = true
 let APICONFIG
@@ -34,11 +35,15 @@ for (var api in APICONFIG) {
           }
         }
         // 解决axios 访问spring 接口，后台接收不到参数问题，qs或者URLSearchParams解决
+        /*
         let params = new URLSearchParams()
         for (var key in config.data) {
           params.append(key, data[key])
         }
-        config.data = params;
+        config.data = params.toString();
+        */
+        // 刷新页面的时候不能用 URLSearchParams，因此使用qs
+        config.data = Qs.stringify(config.data)
 
         console.log(config)
 
