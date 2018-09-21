@@ -11,14 +11,15 @@
 
     <div class="movcard-list">
       <el-row>
-        <el-col :span="6" v-for="item in movlist" :key="item.movieid" :offset="2" >
+        <el-col :span="6" v-if="movlist.length >0" v-for="item in movlist" :key="item.movieid" :offset="2" >
           <div @click="intoMovieDetail(item.movieid)">
           <el-card :body-style="{ padding: '0px' }" style="margin-top: 10px" >
             <img v-bind:src="item.movie.picture" class="image">
             <div style="padding: 10px;">
-              <p style="font-size: 16px;max-lines: 2;height: 36px">{{item.movie.moviename}} <span style="color: #9e6fd7">{{item.movie.averating}}</span></p>
+              <p style="font-size: 16px;max-lines: 3;height: 46px">{{item.movie.moviename}} <span style="color: #9e6fd7">{{item.movie.averating}}</span></p>
               <div class="bottom clearfix">
-                <time class="time">{{ item.movie.showyear }}</time>
+                <p class="time" style="max-lines: 1;line-height: 15px;font-size: 14px;color: #8c939d;overflow:hidden;text-overflow:ellipsis;
+white-space:nowrap;">{{ item.movie.showyear }}</p>
               </div>
             </div>
           </el-card>
@@ -73,28 +74,9 @@
         isIndeterminate: true,
         currentDate: new Date(),
         movieRecommentList: [],
-        movlist:[{
-          "movcatid": 134,
-          "movieid": 110,
-          "categoryid": 1,
-          "movie": {
-            "movieid": 110,
-            "moviename": "Braveheart",
-            "averating": 4,
-            "director": "Mel Gibson",
-            "showyear": "1995-05-24T05:00:00.000+0000",
-            "picture": "http://image.tmdb.org/t/p/w185/2qAgGeYdLjelOEqjW9FYvPHpplC.jpg",
-            "numrating": 67918,
-            "nation": null,
-            "leadactors": "Mel Gibson,Catherine McCormack,Sophie Marceau,Patrick McGoohan,Angus Macfadyen,Brendan Gleeson,James Robinson,James Cosmo,Sean McGinley,Gerda Stevenson,Mhairi Calvey,Jeanne Marine,Sean Lawlor,Sandy Nelson,Alan Tall,Andrew Weir,Brian Cox,Peter Hanly,Stephen Billington,Tommy Flanagan,Rupert Vansittart,Tam White,Ian Bannen,David O'Hara,Peter Mullan,David Gant,Malcolm Tierney,Martin Murphy,Gerard McSorley,Bernard Horsfall,Richard Leaf,Liam Carney,Ralph Riach,Barry McGovern,John Kavanagh,Alun Armstrong,Julie Austin,Alex Norton,Michael Byrne,William Scott-Masson,Dean Lopata,Donal Gibson,Jimmy Chisholm,John Murtagh,David McKay,Niall O'Brien,Martin Dempsey,Jimmy Keogh,Joe Savino,Mal Whyte,Paul Tucker,Graeme Ford,Greg Jeloudov,Rana Morrison,Jer O'Leary",
-            "screenwriter": null,
-            "description": "Enraged at the slaughter of Murron, his new bride and childhood love, Scottish warrior William Wallace slays a platoon of the local English lord's soldiers. This leads the village to revolt and, eventually, the entire country to rise up against English rule.",
-            "typelist": "Action,Drama,History,War",
-            "backpost": "http://image.tmdb.org/t/p/w780/dVZNSiUG8TDzNuaR87NKVTNYhWX.jpg"
-          }
-        }],
+        movlist:[],
         page: 1,
-        size: 21,
+        size: 20,
       }
     },
     head () {
@@ -107,6 +89,7 @@
     },
     mounted:function () {
       this.resqtcatelist()
+      this.movlist = []
       this.resqtmovlist()
       // 请求推荐电影列表的接口
       if (this.token){
@@ -183,7 +166,7 @@
   }
 
   .image {
-    width: 100%;
+    width: 178px;
     display: block;
   }
 
