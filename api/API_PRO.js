@@ -5,4 +5,7 @@ export default {
 
   loginApi: {url: '/user/login'},
   registerApi: {url: '/user/register'},
+  movsearchApi: {url: '/movie/serchbyname'},
+  catelistApi: {url: '/movie/category',method:'get'},
+  movlistApi: {url: '/movie/movielist'},
 }

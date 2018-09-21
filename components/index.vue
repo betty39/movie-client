@@ -40,9 +40,10 @@
       }
     },
     methods: {
-      intoMovieDetail (movieid) {
-        this.$router.push({path: `/movie/detail`})
-      }
+        intoMovieDetail (movieid) {
+          let path = "/movie/" + movieid;
+          this.$router.push({path: path})
+        }
     },
     components: {
       "common-header":   CommonHeader
