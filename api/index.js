@@ -49,7 +49,7 @@ for (var api in APICONFIG) {
 
             // 异常响应
             if (apiData.code !== 0) {
-              alert(apiData.message)
+               alert(apiData.message)
               if (context) {
                 // page 页面请求错误处理方式：公共处理
                 // if code ...

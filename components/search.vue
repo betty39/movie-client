@@ -10,43 +10,25 @@
             :loading="loading"
             @change="changeSelect"
         >
-            <el-option v-for="item in searchInfos" :key="item.value" :label="item.label" :value="item">
-                <span style="float: left; color: #444">{{ item.value }}</span>
-                <span style="float: left; color: #8492a6; font-size: 13px">&nbsp;{{ item.label }}</span>
-                <span style="float: right; color: #8492a6; font-size: 13px; margin-left:15px;">{{ item.text }}</span>
+            <el-option v-for="item in searchInfos" :key="item.movieid" :label="item.moviename" :value="item.movieid">
+                <span style="float: left; color: #444">{{ item.moviename }}</span>
+                <span style="float: left; color: #8492a6; font-size: 13px">&nbsp;{{ item.director }}</span>
+                <span style="float: right; color: #8492a6; font-size: 13px; margin-left:15px;">{{ item.averating }}</span>
             </el-option>
         </el-select>
     </div>
 </template>
 
 <script>
+  import API from '../api'
 
 export default {
     data() {
         return {
             loading:       false,
             value9:        [],
-            searchInfos: [{
-                                     value: '选项1',
-                                     label: '黄金糕',
-                                     href: '/movie/detail',
-                                   }, {
-                                     value: '选项2',
-                                     label: '双皮奶',
-                                      href: '/movie/detail',
-                                   }, {
-                                     value: '选项3',
-                                     label: '蚵仔煎',
-                                      href: '/movie/detail',
-                                   }, {
-                                     value: '选项4',
-                                     label: '龙须面',
-                                      href: '/movie/detail',
-                                   }, {
-                                     value: '选项5',
-                                     label: '北京烤鸭',
-                                      href: '/movie/detail',
-                                   }],
+          timeout: null,
+            searchInfos: [],
         }
     },
     mounted() {
@@ -54,19 +36,40 @@ export default {
     },
     methods: {
         changeSelect(item) {
-            this.$router.push({
-                path: item.href
-            })
+          let path = "/movie/" + item.movieid;
+          this.$router.push({path: path})
         },
         async searchRemoteInfo(query) {
+          let data = {
+            moviename: query
+          }
             // 远程搜素
-        },
+          if (query !== '') {
+
+            this.loading = true;
+            API.movsearchApi(data).then(res => {
+              this.loading = false;
+              this.searchInfos = res.movies
+
+              clearTimeout(this.timeout)
+              this.timeout = setTimeout(() => {
+
+              }, 3000 * Math.random())
+
+            }).catch(msg => {
+              this.loading = false;
+              this.searchInfos = []
+            })
+          } else {
+            this.searchInfos = [];
+          }
+        }
     }
 }
 </script>
 
 <style scoped>
-  >>>.el-select{
+.el-select{
       height: 30px;
       line-height: 30px;
       cursor: text;
@@ -78,15 +81,15 @@ export default {
       position: absolute;
       border:1px solid #eee;
   }
-  >>>.el-input__inner{
+ .el-input__inner{
       color: #3d464d;
       height: 30px;
       width: 200px;
      }
-  >>>.el-select-dropdown{
+ .el-select-dropdown{
       min-width: 31% !important;
      }
-  >>>.el-select-dropdown__item:after{
+.el-select-dropdown__item:after{
     display: none;
      }
 </style>
