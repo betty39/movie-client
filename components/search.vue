@@ -36,7 +36,7 @@ export default {
     },
     methods: {
         changeSelect(item) {
-          let path = "/movie/" + item.movieid;
+          let path = "/movie/" + item;
           this.$router.push({path: path})
         },
         async searchRemoteInfo(query) {
