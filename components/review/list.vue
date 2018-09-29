@@ -46,7 +46,7 @@
 </template>
 
 <script>
-
+  import API from '../../api'
 export default {
     props: {
       reviewList: Array,
@@ -55,6 +55,10 @@ export default {
     return {
       showReviews: this.reviewList,
     }
+  },
+  mouted() {
+console.log("show review child")
+console.log(this.showReviews)
   },
   methods: {
     appendReview(review) {

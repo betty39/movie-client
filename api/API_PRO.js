@@ -1,6 +1,6 @@
 export default {
   // configure
-  baseURL: 'http://localhost:8080/',
+  baseURL: 'http://localhost:8086/',
   method: 'post',
 
   // 账户模块
@@ -16,12 +16,13 @@ export default {
 
   // 电影模块
   movieDescApi: {url: '/movie/description'},
+  movieReviewsApi: {url: '/profile/movieReviewLists'},
   similarMoviesApi: {url: '/movie/getsimilar'},
   movsearchApi: {url: '/movie/serchbyname'},
   catelistApi: {url: '/movie/category',method:'get'},
   movlistApi: {url: '/movie/movielist'},
 
   // 推荐
-  movieRecommendApi: {url: '/profile/getRecommend'},
+  movieRecommendApi: {url: '/recommend/movieLists'},
 
 }

@@ -25,13 +25,16 @@ for (var api in APICONFIG) {
         }
         delete data.token
 
+        let loginUser = Cookies.get("user")
+        let user = loginUser ? JSON.parse(loginUser) : {}
+        // 将 authorization 换成 userid
         let config = {
           baseURL: APICONFIG.baseURL,
           url: apiInfo.url,
           method: method,
           data: data,
           headers: {
-            authorization: token
+            authorization: user.userid || null
           }
         }
         // 解决axios 访问spring 接口，后台接收不到参数问题，qs或者URLSearchParams解决

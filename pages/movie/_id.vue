@@ -2,7 +2,6 @@
 <div>
   <movheader></movheader>
   <movdetail
-    :reviewList = "reviewList"
     :moviedescription = "moviedescription">
   </movdetail>
 </div>

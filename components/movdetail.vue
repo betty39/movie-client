@@ -82,7 +82,6 @@
   export default {
     name: 'movdetail',
     props: {
-      reviewList: Array,
       moviedescription: Array,
     },
     data () {
@@ -93,6 +92,7 @@
         showReview: false,
         similarLists: [],
         ifLikeThisMovie: false,
+        reviewList: [],
       }
     },
     head () {
@@ -114,6 +114,16 @@
           }
         })
       }
+      // 请求电影评论列表
+        API.movieReviewsApi({
+          movieid: this.moviedescription[0].movieid,
+        }).then(res => {
+          if (res.code === undefined) {
+            this.reviewList = res.reviewList
+            console.log("show reviewlist")
+            console.log(this.reviewList)
+          }
+        })
     },
     methods: {
       async handleClick(tab, event) {
