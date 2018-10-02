@@ -40,7 +40,7 @@
                 <p style="line-height: 20px">{{ moviedescription[0].description }}</p>
               </div>
               <reviewList
-                :reviewList="reviewList"
+                :reviewLists="reviewLists"
                 ref="reviewChild"
               ></reviewList>
             </el-tab-pane>
@@ -92,7 +92,7 @@
         showReview: false,
         similarLists: [],
         ifLikeThisMovie: false,
-        reviewList: [],
+        reviewLists: [],
       }
     },
     head () {
@@ -104,6 +104,17 @@
       }
     },
     mounted(){
+      // 请求电影评论列表
+      API.movieReviewsApi({
+        movieid: this.moviedescription[0].movieid,
+      }).then(res => {
+        if (res.code === undefined) {
+          this.reviewLists = res.reviewList
+          console.log("show reviewlist")
+          console.log(this.reviewLists)
+          this.$refs.reviewChild.getReviews(this.reviewLists)
+        }
+      })
       // 请求是否喜欢电影的接口
       if (this.token) {
         API.ifLikeMovieApi({
@@ -114,16 +125,6 @@
           }
         })
       }
-      // 请求电影评论列表
-        API.movieReviewsApi({
-          movieid: this.moviedescription[0].movieid,
-        }).then(res => {
-          if (res.code === undefined) {
-            this.reviewList = res.reviewList
-            console.log("show reviewlist")
-            console.log(this.reviewList)
-          }
-        })
     },
     methods: {
       async handleClick(tab, event) {

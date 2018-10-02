@@ -49,18 +49,17 @@
   import API from '../../api'
 export default {
     props: {
-      reviewList: Array,
+      reviewLists: Array,
     },
   data() {
     return {
-      showReviews: this.reviewList,
+      showReviews: this.reviewLists,
     }
   },
-  mouted() {
-console.log("show review child")
-console.log(this.showReviews)
-  },
   methods: {
+    getReviews(reviews) {
+        this.showReviews = reviews;
+    },
     appendReview(review) {
         let reviews = [
             review

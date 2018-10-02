@@ -146,14 +146,17 @@
     mounted() {
       this.loginUser = this.$store.state.user;
       // 请求喜欢与评价接口
-      API.profileRviewAndReactsApi({
+      API.profileReviewsApi({
       }).then(res => {
-        this.likeLists = res.rectab
         this.reviewLists = res.review
         // 处理显示数据
         this.reviewLists.forEach(function (ele, index) {
           ele['content'] = ele['content'] == null ? '' : ele['content']
         })
+      })
+      API.profileCollectsApi({
+      }).then(res => {
+        this.likeLists = res.rectab
       })
       // 请求推荐电影列表的接口
       API.movieRecommendApi({
