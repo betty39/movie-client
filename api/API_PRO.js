@@ -13,7 +13,7 @@ export default {
   profileCollectsApi: {url: '/collect/lists'},
   submitReviewApi: {url: '/review/create'},
   ifLikeMovieApi: {url: '/collect/ifLikeMovie'},
-  submitLikeApi: {url: '/collect/rectab'},
+  submitLikeApi: {url: '/collect/create'},
 
   // 电影模块
   movieDescApi: {url: '/movie/description'},
